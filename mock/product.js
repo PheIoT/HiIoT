@@ -4,17 +4,18 @@ const config = require('../src/utils/config')
 
 const { apiPrefix } = config
 
+
 let productsListData = Mock.mock({
   'data|80-100': [
     {
       id: '@id',
       name: '@name',
-      nickName: '@last',
-      version:'base|advance',
+      'version[基础版|高级版]':'',
       'productKey|16':'',
       'productSecret|32':'',
-      'pointType|[device,netgate]':'',
+      'pointType|[设备,网关]':'',
       'deviceCount|0-1000': 0,
+      createTime: '@datetime',
     },
   ],
 })

@@ -5,13 +5,12 @@ import classnames from 'classnames'
 import { DropOption } from 'components'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
-import AnimTableBody from 'components/DataTable/AnimTableBody'
 import styles from './List.less'
 
 const { confirm } = Modal
 
 const List = ({
-  onDeleteItem, onEditItem, isMotion, location, ...tableProps
+  onDeleteItem, onEditItem, location, ...tableProps
 }) => {
   location.query = queryString.parse(location.search)
 
@@ -30,61 +29,47 @@ const List = ({
 
   const columns = [
     {
-      title: 'Avatar ',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: text => <img alt="avatar" width={24} src={text} />,
-    }, {
-      title: 'Name',
+      title: '产品名称',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
     }, {
-      title: 'NickName',
-      dataIndex: 'nickName',
-      key: 'nickName',
-    }, {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    }, {
-      title: 'Gender',
-      dataIndex: 'isMale',
-      key: 'isMale',
+      title: '产品版本',
+      dataIndex: 'version',
+      key: 'version',
       render: text => (<span>{text
-        ? 'Male'
-        : 'Female'}</span>),
+        ? '基础班'
+        : '高级版'}</span>),
     }, {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
+      title: '产品秘钥',
+      dataIndex: 'productKey',
+      key: 'productKey',
     }, {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: '节点类型',
+      dataIndex: 'nodeType',
+      key: 'nodeType',
+      render: text => (<span>{text
+        ? '设备'
+        : '网关'}</span>),
     }, {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: '设备数',
+      dataIndex: 'deviceCount',
+      key: 'deviceCount',
     }, {
-      title: 'CreateTime',
+      title: '添加时间',
       dataIndex: 'createTime',
       key: 'createTime',
+      // width: 120,
     }, {
-      title: 'Operation',
+      title: '操作',
       key: 'operation',
-      width: 100,
+      width:100,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '查看' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
 
-  const AnimateBody = (props) => {
-    return <AnimTableBody {...props} />
-  }
 
   const CommonBody = (props) => {
     return <tbody {...props} />
@@ -93,15 +78,12 @@ const List = ({
   return (
     <Table
       {...tableProps}
-      className={classnames(styles.table, { [styles.motion]: isMotion })}
+      className={classnames(styles.table)}
       bordered
-      scroll={{ x: 1250 }}
       columns={columns}
       simple
       rowKey={record => record.id}
-      components={{
-        body: { wrapper: isMotion ? AnimateBody : CommonBody },
-      }}
+      components={CommonBody}
     />
   )
 }

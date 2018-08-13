@@ -15,7 +15,7 @@ import '../themes/index.less'
 import './app.less'
 
 const { Content, Footer, Sider } = Layout
-const { Header, Bread, styles } = MyLayout
+const { Header,  styles } = MyLayout
 const { prefix, openPages } = config
 
 let lastHref
@@ -78,10 +78,10 @@ const App = ({
     },
   }
 
-  const breadProps = {
-    menu,
-    location,
-  }
+  // const breadProps = {
+  //   menu,
+  //   location,
+  // }
 
   if (openPages && openPages.includes(pathname)) {
     return (<div>
@@ -113,7 +113,7 @@ const App = ({
           <BackTop target={() => document.getElementById('mainContainer')} />
           <Header {...headerProps} />
           <Content>
-            <Bread {...breadProps} />
+            {/*<Bread {...breadProps} />*/}
             {hasPermission ? children : <Error />}
           </Content>
           <Footer >

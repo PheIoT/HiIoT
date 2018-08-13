@@ -1,22 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { routerRedux } from 'dva/router'
-import { connect } from 'dva'
-import { Row, Col, Button, Popconfirm } from 'antd'
-import { Page } from 'components'
+import {routerRedux} from 'dva/router'
+import {connect} from 'dva'
+import {Page} from 'components'
+import PageHeaderLayout from 'layouts/PageHeaderLayout'
+
 import queryString from 'query-string'
 import List from './components/List'
 import Filter from './components/Filter'
 import Modal from './components/Modal'
+import BodyTitle from './components/BodyTitle'
 
+import styles from './product.less'
 
 const Product = ({
-  location, dispatch, product, loading,
-}) => {
+                   location, dispatch, product, loading,
+                 }) => {
   location.query = queryString.parse(location.search)
-  const { query, pathname } = location
+  const {query, pathname} = location
   const {
-    list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys,
+    list, pagination, currentItem, modalVisible, modalType,
   } = product
 
   const handleRefresh = (newQuery) => {
@@ -57,7 +60,6 @@ const Product = ({
     loading: loading.effects['product/query'],
     pagination,
     location,
-    isMotion,
     onChange (page) {
       handleRefresh({
         page: page.current,
@@ -84,82 +86,76 @@ const Product = ({
         },
       })
     },
-    rowSelection: {
-      selectedRowKeys,
-      onChange: (keys) => {
-        dispatch({
-          type: 'product/updateState',
-          payload: {
-            selectedRowKeys: keys,
-          },
-        })
-      },
-    },
   }
 
   const filterProps = {
-    isMotion,
     filter: {
       ...query,
     },
+
     onFilterChange (value) {
       handleRefresh({
         ...value,
         page: 1,
       })
     },
-    onAdd () {
+    onFilterInput (value) {
       dispatch({
-        type: 'product/showModal',
+        type: 'product/onFilterChange',
         payload: {
-          modalType: 'create',
+          inputFilter: value,
         },
       })
     },
     switchIsMotion () {
-      dispatch({ type: 'product/switchIsMotion' })
+      dispatch({type: 'product/switchIsMotion'})
     },
   }
 
-  const handleDeleteItems = () => {
-    dispatch({
-      type: 'product/multiDelete',
-      payload: {
-        ids: selectedRowKeys,
+  const pageHeaderContent = (
+    <div className={styles.pageHeaderContent}>
+      <div className={styles.content}>
+        <div className={styles.contentTitle}>产品管理</div>
+      </div>
+    </div>
+  )
+
+  const bodyTitleProps = {
+    title: '产品列表',
+    buttons: [{
+      type: 'default',
+      text: '刷新',
+      style: {marginRight : '8px'},
+      onClick: () => {
+        console.log('on btn click')
       },
-    })
-      .then(() => {
-        handleRefresh({
-          page: (list.length === selectedRowKeys.length && pagination.current > 1) ? pagination.current - 1 : pagination.current,
-        })
-      })
+    }, {
+      type: 'primary',
+      text: '创建产品',
+      onClick: () => {
+        console.log('on btn click')
+      },
+    },
+    ],
   }
 
   return (
-    <Page inner>
-      <Filter {...filterProps} />
-      {
-        selectedRowKeys.length > 0 &&
-        <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
-          <Col>
-            {`Selected ${selectedRowKeys.length} items `}
-            <Popconfirm title="Are you sure delete these items?" placement="left" onConfirm={handleDeleteItems}>
-              <Button type="primary" style={{ marginLeft: 8 }}>Remove</Button>
-            </Popconfirm>
-          </Col>
-        </Row>
-      }
-      <List {...listProps} />
-      {modalVisible && <Modal {...modalProps} />}
-    </Page>
+    <PageHeaderLayout content={pageHeaderContent}>
+      <Page inner>
+        <BodyTitle {...bodyTitleProps}/>
+        <Filter {...filterProps} />
+        <List {...listProps} />
+        {modalVisible && <Modal {...modalProps} />}
+      </Page>
+    </PageHeaderLayout>
   )
 }
 
-Product.propTypes = {
-  product: PropTypes.object,
-  location: PropTypes.object,
-  dispatch: PropTypes.func,
-  loading: PropTypes.object,
-}
+  Product.propTypes = {
+    product: PropTypes.object,
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    loading: PropTypes.object,
+  }
 
-export default connect(({ product, loading }) => ({ product, loading }))(Product)
+  export default connect(({product, loading}) => ({product, loading}))(Product)

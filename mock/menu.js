@@ -11,7 +11,7 @@ let database = [
   {
     id: '2',
     bpid: '1',
-    name: 'Products',
+    name: '产品管理',
     icon: 'cloud-o',
     route: '/product',
   },
