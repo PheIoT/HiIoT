@@ -14,17 +14,19 @@ class ClearInput extends React.Component {
     }
   }
 
-  emitEmpty = () => {
-    this.inputField.focus()
-    this.setState({inputValue: ''})
-
-  }
 
   render () {
     const {inputValue, placeholder, onPressEnter} = this.state
     const {onChange} = this.props
 
-    const suffix = inputValue ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null
+    const emitEmpty = () => {
+      this.inputField.focus()
+      this.setState({inputValue: ''})
+      onChange('')
+    }
+    
+    const suffix = inputValue ? <Icon type="close-circle" onClick={emitEmpty}/> : null
+
     return (
       <Input
         placeholder={placeholder}

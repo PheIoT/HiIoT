@@ -17,7 +17,6 @@ export default modelExtend(pageModel, {
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
-    inputFilter:'',
   },
 
   subscriptions: {
@@ -91,13 +90,9 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-    * onFilterChange ({payload},{put}) {
-      yield put({type: 'updateState', payload })
-    },
   },
 
   reducers: {
-
     showModal (state, {payload}) {
       return {...state, ...payload, modalVisible: true}
     },

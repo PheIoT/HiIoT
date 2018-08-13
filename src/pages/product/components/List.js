@@ -37,8 +37,8 @@ const List = ({
       title: '产品版本',
       dataIndex: 'version',
       key: 'version',
-      render: text => (<span>{text
-        ? '基础班'
+      render: text => (<span>{text==='base'
+        ? '基础版'
         : '高级版'}</span>),
     }, {
       title: '产品秘钥',
@@ -46,9 +46,9 @@ const List = ({
       key: 'productKey',
     }, {
       title: '节点类型',
-      dataIndex: 'nodeType',
-      key: 'nodeType',
-      render: text => (<span>{text
+      dataIndex: 'pointType',
+      key: 'pointType',
+      render: text => (<span>{text === 'device'
         ? '设备'
         : '网关'}</span>),
     }, {

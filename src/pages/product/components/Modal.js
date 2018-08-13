@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal, Cascader } from 'antd'
-import city from 'utils/city'
+import {Form, Input, Radio, Modal, Tooltip, Icon} from 'antd'
 
 const FormItem = Form.Item
 
@@ -15,15 +14,15 @@ const formItemLayout = {
 }
 
 const modal = ({
-  item = {},
-  onOk,
-  form: {
-    getFieldDecorator,
-    validateFields,
-    getFieldsValue,
-  },
-  ...modalProps
-}) => {
+                 item = {},
+                 onOk,
+                 form: {
+                   getFieldDecorator,
+                   validateFields,
+                   getFieldsValue,
+                 },
+                 ...modalProps
+               }) => {
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -33,7 +32,6 @@ const modal = ({
         ...getFieldsValue(),
         key: item.key,
       }
-      data.address = data.address.join(' ')
       onOk(data)
     })
   }
@@ -46,88 +44,60 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="Name" hasFeedback {...formItemLayout}>
+        <FormItem label="产品版本" {...formItemLayout}>
+          {getFieldDecorator('version',{
+            initialValue: 'base',
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(
+            <Radio.Group>
+              <Radio.Button value="base">基础版</Radio.Button>
+              <Radio.Button value="advance">高级版</Radio.Button>
+            </Radio.Group>
+          )}
+        </FormItem>
+        <FormItem label={(<span>产品名称&nbsp;
+            <Tooltip title="支持中文、英文字母、数字和下划线，长度限制4~30，中文算2位">
+              <Icon type="question-circle-o"/>
+            </Tooltip>
+          </span>
+        )} hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
-            initialValue: item.name,
             rules: [
               {
                 required: true,
               },
             ],
-          })(<Input />)}
+          })(<Input placeholder="请输入您产品的名称"/>)
+          }
         </FormItem>
-        <FormItem label="NickName" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('nickName', {
-            initialValue: item.nickName,
+
+        <FormItem label="节点类型" {...formItemLayout}>
+          {getFieldDecorator('pointType',{
+            initialValue: 'device',
             rules: [
               {
                 required: true,
               },
             ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="Gender" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('isMale', {
-            initialValue: item.isMale,
-            rules: [
-              {
-                required: true,
-                type: 'boolean',
-              },
-            ],
-          })(<Radio.Group>
-            <Radio value>Male</Radio>
-            <Radio value={false}>Female</Radio>
+          })
+          (<Radio.Group>
+            <Radio value='device'>设备</Radio>
+            <Radio value='netgate'>网关</Radio>
           </Radio.Group>)}
         </FormItem>
-        <FormItem label="Age" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('age', {
-            initialValue: item.age,
+        <FormItem label="产品描述"  hasFeedback {...formItemLayout}>
+          {getFieldDecorator('description', {
             rules: [
               {
-                required: true,
-                type: 'number',
+                required: false,
+                type: 'string',
               },
             ],
-          })(<InputNumber min={18} max={100} />)}
-        </FormItem>
-        <FormItem label="Phone" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('phone', {
-            initialValue: item.phone,
-            rules: [
-              {
-                required: true,
-                pattern: /^1[34578]\d{9}$/,
-                message: 'The input is not valid phone!',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="E-mail" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('email', {
-            initialValue: item.email,
-            rules: [
-              {
-                required: true,
-                pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
-                message: 'The input is not valid E-mail!',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="Address" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('address', {
-            initialValue: item.address && item.address.split(' '),
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<Cascader
-            style={{ width: '100%' }}
-            options={city}
-            placeholder="Pick an address"
-          />)}
+          })(<Input.TextArea rows={4} placeholder='请输入产品描述'/>)}
         </FormItem>
       </Form>
     </Modal>

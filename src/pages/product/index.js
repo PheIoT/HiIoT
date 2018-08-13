@@ -19,7 +19,7 @@ const Product = ({
   location.query = queryString.parse(location.search)
   const {query, pathname} = location
   const {
-    list, pagination, currentItem, modalVisible, modalType,
+    list, pagination, modalVisible, modalType,
   } = product
 
   const handleRefresh = (newQuery) => {
@@ -33,11 +33,11 @@ const Product = ({
   }
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: {},
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['product/update'],
-    title: `${modalType === 'create' ? 'Create Product' : 'Update Product'}`,
+    title: `创建产品`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -77,15 +77,6 @@ const Product = ({
           })
         })
     },
-    onEditItem (item) {
-      dispatch({
-        type: 'product/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
-      })
-    },
   }
 
   const filterProps = {
@@ -98,17 +89,6 @@ const Product = ({
         ...value,
         page: 1,
       })
-    },
-    onFilterInput (value) {
-      dispatch({
-        type: 'product/onFilterChange',
-        payload: {
-          inputFilter: value,
-        },
-      })
-    },
-    switchIsMotion () {
-      dispatch({type: 'product/switchIsMotion'})
     },
   }
 
@@ -125,15 +105,20 @@ const Product = ({
     buttons: [{
       type: 'default',
       text: '刷新',
-      style: {marginRight : '8px'},
+      style: {marginRight: '8px'},
       onClick: () => {
-        console.log('on btn click')
+        handleRefresh()
       },
     }, {
       type: 'primary',
       text: '创建产品',
       onClick: () => {
-        console.log('on btn click')
+        dispatch({
+          type: 'product/showModal',
+          payload: {
+            modalType: 'create',
+          },
+        })
       },
     },
     ],
@@ -151,11 +136,11 @@ const Product = ({
   )
 }
 
-  Product.propTypes = {
-    product: PropTypes.object,
-    location: PropTypes.object,
-    dispatch: PropTypes.func,
-    loading: PropTypes.object,
-  }
+Product.propTypes = {
+  product: PropTypes.object,
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  loading: PropTypes.object,
+}
 
-  export default connect(({product, loading}) => ({product, loading}))(Product)
+export default connect(({product, loading}) => ({product, loading}))(Product)
