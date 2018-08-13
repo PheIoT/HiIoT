@@ -88,4 +88,16 @@ module.exports = {
     res.status(200).end()
   },
 
+  [`DELETE ${apiPrefix}/product/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(database, id, 'id')
+    console.log(data)
+    if (data) {
+      database = database.filter(item => item.id !== id)
+      res.status(204).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
 }

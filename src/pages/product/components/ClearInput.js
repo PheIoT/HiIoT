@@ -24,7 +24,7 @@ class ClearInput extends React.Component {
       this.setState({inputValue: ''})
       onChange('')
     }
-    
+
     const suffix = inputValue ? <Icon type="close-circle" onClick={emitEmpty}/> : null
 
     return (

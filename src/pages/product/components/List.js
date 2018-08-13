@@ -19,7 +19,7 @@ const List = ({
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: 'Are you sure delete this record?',
+        title: '确定要删除产品 ' + record.name + ' 吗?',
         onOk () {
           onDeleteItem(record.id)
         },

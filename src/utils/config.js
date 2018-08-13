@@ -20,7 +20,7 @@ module.exports = {
     users: `${APIV1}/users`,
     posts: `${APIV1}/posts`,
     user: `${APIV1}/user/:id`,
-    product: `${APIV1}/product`,
+    product: `${APIV1}/product/:id`,
     products: `${APIV1}/products`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,

@@ -52,11 +52,10 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * delete ({payload}, {call, put, select}) {
+    * delete ({payload}, {call, put}) {
       const data = yield call(remove, {id: payload})
-      const {selectedRowKeys} = yield select(_ => _.user)
       if (data.success) {
-        yield put({type: 'updateState', payload: {selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload)}})
+        yield put({type: 'updateState'})
       } else {
         throw data
       }
