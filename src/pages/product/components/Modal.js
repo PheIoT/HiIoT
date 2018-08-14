@@ -16,6 +16,7 @@ const formItemLayout = {
 const modal = ({
                  item = {},
                  onOk,
+                 modalType,
                  form: {
                    getFieldDecorator,
                    validateFields,
@@ -23,6 +24,8 @@ const modal = ({
                  },
                  ...modalProps
                }) => {
+
+
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -45,20 +48,24 @@ const modal = ({
     <Modal {...modalOpts}>
       <Form layout="horizontal">
         <FormItem label="产品版本" {...formItemLayout}>
-          {getFieldDecorator('version',{
-            initialValue: 'base',
+          {getFieldDecorator('version', {
+            initialValue: item.version ? item.version : 'base',
             rules: [
               {
                 required: true,
               },
             ],
           })(
-            <Radio.Group>
-              <Radio.Button value="base">基础版</Radio.Button>
-              <Radio.Button value="advance">高级版</Radio.Button>
-            </Radio.Group>
-          )}
+            modalType === 'create' ?
+              <Radio.Group>
+                <Radio.Button value="base">基础版</Radio.Button>
+                <Radio.Button value="advance">高级版</Radio.Button>
+              </Radio.Group>
+              : <div>{item.version === 'base'? '基础版': '高级版'}</div>
+          )
+          }
         </FormItem>
+
         <FormItem label={(<span>产品名称&nbsp;
             <Tooltip title="支持中文、英文字母、数字和下划线，长度限制4~30，中文算2位">
               <Icon type="question-circle-o"/>
@@ -66,6 +73,7 @@ const modal = ({
           </span>
         )} hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
+            initialValue: item.name,
             rules: [
               {
                 required: true,
@@ -76,21 +84,25 @@ const modal = ({
         </FormItem>
 
         <FormItem label="节点类型" {...formItemLayout}>
-          {getFieldDecorator('pointType',{
-            initialValue: 'device',
+          {getFieldDecorator('pointType', {
+            initialValue: item.pointType ? item.pointType : 'device',
             rules: [
               {
                 required: true,
               },
             ],
           })
-          (<Radio.Group>
+          ( modalType === 'create' ?
+            <Radio.Group>
             <Radio value='device'>设备</Radio>
             <Radio value='netgate'>网关</Radio>
-          </Radio.Group>)}
+          </Radio.Group>
+          : <div>{item.pointType === 'device'? '设备': '网关'}</div>)
+          }
         </FormItem>
-        <FormItem label="产品描述"  hasFeedback {...formItemLayout}>
+        <FormItem label="产品描述" hasFeedback {...formItemLayout}>
           {getFieldDecorator('description', {
+            initialValue: item.description,
             rules: [
               {
                 required: false,

@@ -94,7 +94,7 @@ const App = ({
     <div>
       <Loader fullScreen spinning={loading.effects['app/query']} />
       <Helmet>
-        <title>ANTD ADMIN</title>
+        <title>PHEIOT CLOUD</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}

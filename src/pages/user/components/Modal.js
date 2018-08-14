@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal, Cascader } from 'antd'
+import {Form, Input, InputNumber, Radio, Modal, Cascader} from 'antd'
 import city from 'utils/city'
 
 const FormItem = Form.Item
@@ -15,15 +15,15 @@ const formItemLayout = {
 }
 
 const modal = ({
-  item = {},
-  onOk,
-  form: {
-    getFieldDecorator,
-    validateFields,
-    getFieldsValue,
-  },
-  ...modalProps
-}) => {
+                 item = {},
+                 onOk,
+                 form: {
+                   getFieldDecorator,
+                   validateFields,
+                   getFieldsValue,
+                 },
+                 ...modalProps
+               }) => {
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -54,7 +54,7 @@ const modal = ({
                 required: true,
               },
             ],
-          })(<Input />)}
+          })(<Input/>)}
         </FormItem>
         <FormItem label="NickName" hasFeedback {...formItemLayout}>
           {getFieldDecorator('nickName', {
@@ -64,7 +64,7 @@ const modal = ({
                 required: true,
               },
             ],
-          })(<Input />)}
+          })(<Input/>)}
         </FormItem>
         <FormItem label="Gender" hasFeedback {...formItemLayout}>
           {getFieldDecorator('isMale', {
@@ -89,7 +89,7 @@ const modal = ({
                 type: 'number',
               },
             ],
-          })(<InputNumber min={18} max={100} />)}
+          })(<InputNumber min={18} max={100}/>)}
         </FormItem>
         <FormItem label="Phone" hasFeedback {...formItemLayout}>
           {getFieldDecorator('phone', {
@@ -101,7 +101,7 @@ const modal = ({
                 message: 'The input is not valid phone!',
               },
             ],
-          })(<Input />)}
+          })(<Input/>)}
         </FormItem>
         <FormItem label="E-mail" hasFeedback {...formItemLayout}>
           {getFieldDecorator('email', {
@@ -113,7 +113,7 @@ const modal = ({
                 message: 'The input is not valid E-mail!',
               },
             ],
-          })(<Input />)}
+          })(<Input/>)}
         </FormItem>
         <FormItem label="Address" hasFeedback {...formItemLayout}>
           {getFieldDecorator('address', {
@@ -124,7 +124,7 @@ const modal = ({
               },
             ],
           })(<Cascader
-            style={{ width: '100%' }}
+            style={{width: '100%'}}
             options={city}
             placeholder="Pick an address"
           />)}

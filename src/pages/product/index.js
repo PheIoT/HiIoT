@@ -34,6 +34,7 @@ const Product = ({
 
   const modalProps = {
     item: {},
+    modalType : modalType,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['product/update'],

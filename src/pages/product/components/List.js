@@ -32,7 +32,7 @@ const List = ({
       title: '产品名称',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
+      render: (text, record) => <Link to={`product/${record.id}`}>{text}</Link>,
     }, {
       title: '产品版本',
       dataIndex: 'version',

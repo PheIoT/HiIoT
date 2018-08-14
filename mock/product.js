@@ -10,10 +10,10 @@ let productsListData = Mock.mock({
     {
       id: '@id',
       name: '@name',
-      'version[base,advance]':'',
-      'productKey|16':'',
-      'productSecret|32':'',
-      'pointType|[device,netgate]':'',
+      'version|1':['base','advance'],
+      'productKey|12':'',
+      'productSecret|16':'',
+      'pointType|1':['device','netgate'],
       'deviceCount|+1': 1,
       createTime: '@datetime',
       'description':'@cword',
@@ -88,6 +88,16 @@ module.exports = {
     res.status(200).end()
   },
 
+  [`GET ${apiPrefix}/product/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(database, id, 'id')
+    if (data) {
+      res.status(200).json(data)
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
   [`DELETE ${apiPrefix}/product/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
@@ -99,5 +109,23 @@ module.exports = {
       res.status(404).json(NOTFOUND)
     }
   },
+  [`PATCH ${apiPrefix}/product/:id`] (req, res) {
+    const { id } = req.params
+    const editItem = req.body
+    let isExist = false
 
+    database = database.map((item) => {
+      if (item.id === id) {
+        isExist = true
+        return Object.assign({}, item, editItem)
+      }
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
 }
