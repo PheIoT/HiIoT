@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {routerRedux} from 'dva/router'
 import {connect} from 'dva'
 import {Page} from 'components'
-import PageHeaderLayout from 'layouts/PageHeaderLayout'
+import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 import queryString from 'query-string'
 import List from './components/List'

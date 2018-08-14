@@ -1,3 +1,4 @@
+
 export default {
   plugins: [
     'umi-plugin-dva',
@@ -22,5 +23,4 @@ export default {
       },
     ],
   ],
-
 }

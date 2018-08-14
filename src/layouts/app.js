@@ -10,7 +10,6 @@ import { BackTop, Layout } from 'antd'
 import { classnames, config } from 'utils'
 import { Helmet } from 'react-helmet'
 import { withRouter } from 'dva/router'
-import Error from '../pages/404'
 import '../themes/index.less'
 import './app.less'
 
@@ -31,6 +30,7 @@ const App = ({
   const { iconFontJS, iconFontCSS, logo } = config
   const current = menu.filter(item => pathToRegexp(item.route || '').exec(pathname))
   const hasPermission = current.length ? permissions.visit.includes(current[0].id) : false
+  console.log(hasPermission)
   const { href } = window.location
 
   if (lastHref !== href) {
@@ -114,7 +114,8 @@ const App = ({
           <Header {...headerProps} />
           <Content>
             {/*<Bread {...breadProps} />*/}
-            {hasPermission ? children : <Error />}
+            {/*{hasPermission ? children : <Error />}*/}
+            {children}
           </Content>
           <Footer >
             {config.footerText}

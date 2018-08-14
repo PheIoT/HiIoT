@@ -10,7 +10,6 @@ let database = [
   },
   {
     id: '2',
-    bpid: '1',
     name: '产品管理',
     icon: 'cloud-o',
     route: '/product',
@@ -21,13 +20,6 @@ let database = [
     bpid: '2',
     name: 'Product Detail',
     route: '/product/:id',
-  },
-  {
-    id: '3',
-    mpid: '3',
-    bpid: '3',
-    name: 'User',
-    route: '/user/',
   },
 ]
 
