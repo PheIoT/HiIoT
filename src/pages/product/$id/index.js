@@ -11,7 +11,7 @@ import Modal from '../components/Modal'
 import queryString from "query-string"
 
 const Detail = ({location, dispatch, productDetail, loading}) => {
-  const {data, secretVisible, activeTabKey, modalVisible, modalType} = productDetail
+  const {data, secretVisible, activeTabKey, modalVisible, modalType, routes} = productDetail
   location.query = queryString.parse(location.search)
   const {query, pathname} = location
 
@@ -154,6 +154,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
         content={pageHeaderContent}
         tabList={tabList}
         tabOnChange={tabOnchange}
+        routes={routes}
       >
         {contentList[activeTabKey]}
         {modalVisible && <Modal {...modalProps} />}

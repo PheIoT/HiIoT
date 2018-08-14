@@ -22,7 +22,9 @@ export default modelExtend(model, {
           dispatch({type: 'query', payload: {id: match[1]}})
         }
       })
+      // dispatch({type: 'getRoutesForBread'})
     },
+
   },
 
   effects: {

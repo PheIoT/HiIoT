@@ -126,7 +126,9 @@ const Product = ({
   }
 
   return (
-    <PageHeaderLayout content={pageHeaderContent}>
+    <PageHeaderLayout
+      content={pageHeaderContent}
+    >
       <Page inner>
         <BodyTitle {...bodyTitleProps}/>
         <Filter {...filterProps} />
