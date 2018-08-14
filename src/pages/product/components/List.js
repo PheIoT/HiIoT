@@ -1,23 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Modal } from 'antd'
+import {Table, Modal} from 'antd'
 import classnames from 'classnames'
-import { DropOption } from 'components'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import queryString from 'query-string'
 import styles from './List.less'
 
-const { confirm } = Modal
+const {confirm} = Modal
 
 const List = ({
-  onDeleteItem, onEditItem, location, ...tableProps
-}) => {
+                onDeleteItem, location, ...tableProps
+              }) => {
   location.query = queryString.parse(location.search)
 
   const handleMenuClick = (record, e) => {
-    if (e.key === '1') {
-      onEditItem(record)
-    } else if (e.key === '2') {
+    if (e === 'del') {
       confirm({
         title: '确定要删除产品 ' + record.name + ' 吗?',
         onOk () {
@@ -37,7 +34,7 @@ const List = ({
       title: '产品版本',
       dataIndex: 'version',
       key: 'version',
-      render: text => (<span>{text==='base'
+      render: text => (<span>{text === 'base'
         ? '基础版'
         : '高级版'}</span>),
     }, {
@@ -63,13 +60,14 @@ const List = ({
     }, {
       title: '操作',
       key: 'operation',
-      width:100,
+      width: 100,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '查看' }, { key: '2', name: '删除' }]} />
+        return <div><Link to={`product/${record.id}`}>查看</Link> <a key='del'
+                                                                   onClick={e => handleMenuClick(record, 'del', e)}>删除</a>
+        </div>
       },
     },
   ]
-
 
   const CommonBody = (props) => {
     return <tbody {...props} />
@@ -90,7 +88,7 @@ const List = ({
 
 List.propTypes = {
   onDeleteItem: PropTypes.func,
-  onEditItem: PropTypes.func,
+  onViewItem: PropTypes.func,
   isMotion: PropTypes.bool,
   location: PropTypes.object,
 }
