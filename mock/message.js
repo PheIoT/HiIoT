@@ -14,6 +14,7 @@ let productLogsListData = Mock.mock({
       'statusDetail|12': '@cword',
       createTime: '@datetime',
       'description|10': '@cword',
+      'type|1':['up', 'down'],
     },
   ],
 })
@@ -29,7 +30,6 @@ module.exports = {
     let {pageSize, page, ...other} = query
     pageSize = pageSize || 10
     page = page || 1
-    console.log(other)
 
     let newData = database
     for (let key in other) {

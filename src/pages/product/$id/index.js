@@ -75,7 +75,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
   const onMsgTabChange = (key) => {
     dispatch({
       type: 'productDetail/activeTab',
-      payload: {message: {...smessage, activeMsgTabKey: key}},
+      payload: {message: {...smessage, list:[], activeMsgTabKey: key}},
     })
   }
 
@@ -84,7 +84,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
     onFilterChange: (queryParam) => {
       dispatch({
         type: 'productDetail/queryMessage',
-        payload: {...queryParam},
+        payload: {...queryParam,type: activeMsgTabKey},
       })
 
     },
@@ -99,6 +99,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
       dispatch({
         type: 'productDetail/queryMessage',
         payload: {
+          type: activeMsgTabKey,
           page: page.current,
           pageSize: page.pageSize,
         },
@@ -114,7 +115,10 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
       </Page>
     ),
     down: (
-      <div>b</div>
+      <Page inner>
+        <Filter {...msgFilterProps} />
+        <List {...msgListProps} />
+      </Page>
     ),
   }
   const contentList = {

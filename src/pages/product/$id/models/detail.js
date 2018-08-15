@@ -136,5 +136,11 @@ export default modelExtend(model, {
     hideModal (state) {
       return {...state, modalVisible: false}
     },
+    activeTab (state, {payload}){
+      return {
+        ...state,
+        ...payload,
+      }
+    },
   },
 })
