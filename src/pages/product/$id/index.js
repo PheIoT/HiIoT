@@ -3,15 +3,20 @@ import PropTypes from 'prop-types'
 import {routerRedux} from 'dva/router'
 import {connect} from 'dva'
 import {Tag, Row, Col, Card, Button} from 'antd'
+import {Page} from 'components'
 import styles from './index.less'
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout'
 import DescriptionList from '../components/DescriptionList'
 import Description from '../components/Description'
 import Modal from '../components/Modal'
 import queryString from "query-string"
+import Filter from './components/Filter'
+import List from './components/List'
 
 const Detail = ({location, dispatch, productDetail, loading}) => {
-  const {data, secretVisible, activeTabKey, modalVisible, modalType, routes} = productDetail
+  const {data, secretVisible, activeTabKey, message, modalVisible, modalType} = productDetail
+  const {activeMsgTabKey, query: msgQuery, list: msgList, pagination: msgPagination} = message
+
   location.query = queryString.parse(location.search)
   const {query, pathname} = location
 
@@ -24,7 +29,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
   const tabOnchange = (key) => {
     dispatch({
       type: 'productDetail/activeTab',
-      payload: key,
+      payload: {activeTabKey: key},
     })
   }
 
@@ -40,7 +45,6 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
       type: 'productDetail/showModal',
       payload: {
         modalType: 'update',
-        // currentItem: {data},
       },
     })
   }
@@ -51,19 +55,64 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
       tab: '产品信息',
     },
     {
-      key: 'communication',
-      tab: '消息通讯',
-    },
-    {
-      key: 'subscription',
-      tab: '服务订阅',
-    },
-    {
       key: 'logs',
       tab: '日志服务',
     },
   ]
+  const logTabList = [
+    {
+      key: 'up',
+      tab: '上行消息分析',
+    },
+    {
+      key: 'down',
+      tab: '下行消息分析',
+    },
+  ]
 
+  const onMsgTabChange = (key) => {
+    dispatch({
+      type: 'productDetail/activeTab',
+      payload: {message: {...message, activeMsgTabKey: key}},
+    })
+  }
+
+  const msgFilterProps = {
+    filter: msgQuery,
+    onFilterChange: (queryParam) => {
+      dispatch({
+        type: 'productDetail/queryMessage',
+        payload: {...queryParam},
+      })
+
+    },
+  }
+
+  const msgListProps = {
+    dataSource: msgList,
+    loading: loading.effects['productDetail/queryMessage'],
+    pagination: msgPagination,
+    location,
+    onChange () {
+      // handleRefresh({
+      //   page: page.current,
+      //   pageSize: page.pageSize,
+      // })
+    },
+  }
+  // console.log(logListProps)
+  // console.log(List)
+  const logCardContentList = {
+    up: (
+      <Page inner>
+        <Filter {...msgFilterProps} />
+        <List {...msgListProps} />
+      </Page>
+    ),
+    down: (
+      <div>b</div>
+    ),
+  }
   const contentList = {
     detail: (
       <Card title="产品信息" style={{marginBottom: 24}} bordered={false}
@@ -80,14 +129,17 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
         </DescriptionList>
       </Card>
     ),
-    communication: (
-      <div>b</div>
-    ),
-    subscription: (
-      <div>c</div>
-    ),
     logs: (
-      <div>d</div>
+      <Card
+        title="日志服务"
+        className={styles.tabsCard}
+        bordered={false}
+        tabList={logTabList}
+        activeTabKey={activeMsgTabKey}
+        onTabChange={onMsgTabChange}
+      >
+        {logCardContentList[activeMsgTabKey]}
+      </Card>
     ),
   }
 
@@ -148,13 +200,22 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
       })
     },
   }
+
+  const breadcrumbRoutes = [{
+    path: '/product',
+    name: '产品管理',
+  }, {
+    path: '',
+    name: '产品信息',
+  }]
+
   return (<div className="content-inner">
       <PageHeaderLayout
         title={pageTitle}
         content={pageHeaderContent}
         tabList={tabList}
         tabOnChange={tabOnchange}
-        routes={routes}
+        breadcrumbRoutes={breadcrumbRoutes}
       >
         {contentList[activeTabKey]}
         {modalVisible && <Modal {...modalProps} />}

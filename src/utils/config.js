@@ -22,6 +22,7 @@ module.exports = {
     user: `${APIV1}/user/:id`,
     product: `${APIV1}/product/:id`,
     products: `${APIV1}/products`,
+    message: `${APIV1}/message`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
     weather: `${APIV1}/weather`,

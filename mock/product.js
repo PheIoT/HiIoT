@@ -16,7 +16,7 @@ let productsListData = Mock.mock({
       'pointType|1':['device','netgate'],
       'deviceCount|+1': 1,
       createTime: '@datetime',
-      'description':'@cword',
+      'description|20':'@cword',
     },
   ],
 })
@@ -128,4 +128,5 @@ module.exports = {
       res.status(404).json(NOTFOUND)
     }
   },
+
 }

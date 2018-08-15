@@ -1,7 +1,8 @@
 import pathToRegexp from 'path-to-regexp'
 import modelExtend from 'dva-model-extend'
 import {model} from 'utils/model'
-import {query, update} from "../../services/product"
+import {query, update, queryMessage} from "../../services/product"
+
 
 export default modelExtend(model, {
 
@@ -11,7 +12,23 @@ export default modelExtend(model, {
     data: {},
     secretVisible: false,
     activeTabKey: 'detail',
+
     modalVisible: false,
+    message: {
+      query: {
+        deviceName: '',
+        createTime: '',
+      },
+      list: [],
+      pagination: {
+        showSizeChanger: true,
+        showQuickJumper: true,
+        current: 1,
+        total: 0,
+        pageSize: 10,
+      },
+      activeMsgTabKey: 'up',
+    },
   },
 
   subscriptions: {
@@ -21,10 +38,9 @@ export default modelExtend(model, {
         if (match) {
           dispatch({type: 'query', payload: {id: match[1]}})
         }
-      })
-      // dispatch({type: 'getRoutesForBread'})
-    },
 
+      })
+    },
   },
 
   effects: {
@@ -36,6 +52,25 @@ export default modelExtend(model, {
           type: 'querySuccess',
           payload: {
             data: other,
+          },
+        })
+      } else {
+        throw data
+      }
+    },
+    * queryMessage ({payload}, {call, put}) {
+      const data = yield call(queryMessage, payload)
+      const {success, message, status, ...other} = data
+      if (success) {
+        yield put({
+          type: 'queryMsgSuccess',
+          payload: {
+            list: other.data,
+            pagination: {
+              current: Number(payload.page) || 1,
+              pageSize: Number(payload.pageSize) || 10,
+              total: other.total,
+            },
           },
         })
       } else {
@@ -54,13 +89,13 @@ export default modelExtend(model, {
       yield put({
         type: 'updateState',
         payload: {
-          activeTabKey: payload,
+          ...payload,
         },
       })
     },
 
     * update ({payload}, {call, put, select}) {
-      const id = yield select(({ productDetail }) => productDetail.data.id)
+      const id = yield select(({productDetail}) => productDetail.data.id)
 
       const newProduct = {...payload, id}
       const reData = yield call(update, newProduct)
@@ -78,6 +113,20 @@ export default modelExtend(model, {
       return {
         ...state,
         data,
+      }
+    },
+    queryMsgSuccess (state, {payload}) {
+      const {list, pagination} = payload
+      return {
+        ...state,
+        message: {
+          ...state.message,
+          pagination:{
+            ...state.message.pagination,
+            ...pagination,
+          },
+          list:list,
+        },
       }
     },
     showModal (state, {payload}) {

@@ -1,25 +1,12 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import {Tabs, Breadcrumb} from 'antd'
-import {Link} from 'react-router-dom'
-import pathToRegexp from 'path-to-regexp'
+// import {Link} from 'react-router-dom'
 import classNames from 'classnames'
 import styles from './index.less'
 
 const {TabPane} = Tabs
 
-export function getBreadcrumb (breadcrumbNameMap, url) {
-
-  let breadcrumb = breadcrumbNameMap[url]
-  if (!breadcrumb) {
-    Object.keys(breadcrumbNameMap).forEach(item => {
-      if (pathToRegexp(item).test(url)) {
-        breadcrumb = breadcrumbNameMap[item]
-      }
-    })
-  }
-  return breadcrumb || {}
-}
 
 const PageHeader = (pageHeader) => {
   const {
@@ -34,8 +21,7 @@ const PageHeader = (pageHeader) => {
     tabDefaultActiveKey,
     tabBarExtraContent,
     tabOnChange,
-    routes,
-    location,
+    breadcrumbRoutes,
   } = pageHeader
 
 
@@ -48,113 +34,25 @@ const PageHeader = (pageHeader) => {
   if (tabActiveKey !== undefined) {
     activeKeyProps.activeKey = tabActiveKey
   }
+  let breadcrumbItem = null
+  if (breadcrumbRoutes) {
+    breadcrumbItem = breadcrumbRoutes.map((item) => {
+      let it = item.path === '' ?
+        <Breadcrumb.Item key={item.name}>{item.name}</Breadcrumb.Item>
+        : <Breadcrumb.Item key={item.name} href={item.path}>{item.name}</Breadcrumb.Item>
 
-  // const conversionBreadcrumbList = () => {
-  //   const { breadcrumbSeparator } = pageHeader
-  //   const { routes, params } = pageHeader
-  //   // if (breadcrumbList && breadcrumbList.length) {
-  //   //   return this.conversionFromProps()
-  //   // }
-  //   // 如果传入 routes 和 params 属性
-  //   // If pass routes and params attributes
-  //   if (routes && params) {
-  //     return (
-  //       <Breadcrumb
-  //         className={styles.breadcrumb}
-  //         routes={routes.filter(route => route.breadcrumbName)}
-  //         params={params}
-  //         itemRender={this.itemRender}
-  //         separator={breadcrumbSeparator}
-  //       />
-  //     )
-  //   }
-  //   // 根据 location 生成 面包屑
-  //   // Generate breadcrumbs based on location
-  //   // if (routerLocation && routerLocation.pathname) {
-  //   //   return this.conversionFromLocation(routerLocation, breadcrumbNameMap)
-  //   // }
-  //   return null
-  // }
-
-  // const getBreadcrumbDom = () => {
-  //   const breadcrumb = conversionBreadcrumbList()
-  // }
-
-  // let breadcrumb = conversionBreadcrumbList()
-  let pathArray = []
-  let breads = []
-  const buildRoutes = () => {
-
-    const getPathArray = (item) => {
-      pathArray.unshift(item)
-      // if (item.bpid) {
-      //   getPathArray(queryArray(menu, item.bpid, 'id'))
-      // }
-
-    }
-
-    // 匹配当前路由
-
-    let current
-    for (let index in routes) {
-      if (routes[index].route && pathToRegexp(routes[index].route).exec(location.pathname)) {
-        current = routes[index]
-        break
-      }
-    }
-    let paramMap = {}
-    if (!current) {
-      pathArray.push(routes[0] || {
-        id: 1,
-        icon: 'laptop',
-        name: 'Dashboard',
-      })
-      pathArray.push({
-        id: 404,
-        name: 'Not Found',
-      })
-    } else {
-      getPathArray(current)
-
-      let keys = []
-      let values = pathToRegexp(current.route, keys).exec(location.pathname.replace('#', ''))
-      if (keys.length) {
-        keys.forEach((currentValue, index) => {
-          if (typeof currentValue.name !== 'string') {
-            return
-          }
-          paramMap[currentValue.name] = values[index + 1]
-        })
-      }
-    }
-    // 递归查找父级
-    breads = pathArray.map((item, key) => {
-      const content = (
-        <span>{item.name}</span>
-      )
-      return (
-        <Breadcrumb.Item key={key}>
-          {((pathArray.length - 1) !== key)
-            ? <Link to={pathToRegexp.compile(item.route || '')(paramMap) || '#'}>
-              {content}
-            </Link>
-            : content}
-        </Breadcrumb.Item>
-      )
+      return it
     })
-
-
   }
-
-  if (routes) {
-    breads = buildRoutes()
-  }
-
   return (
     <div className={clsString}>
-      <Breadcrumb>
-        {breads}
-      </Breadcrumb>
+      {
+        breadcrumbItem && breadcrumbRoutes ?
+          <Breadcrumb separator=">" className={styles.breadcrumb}>
+            {breadcrumbItem}
+          </Breadcrumb> : ''
+      }
+
       <div className={styles.detail}>
         {logo && <div className={styles.logo}>{logo}</div>}
         <div className={styles.main}>
@@ -184,18 +82,5 @@ const PageHeader = (pageHeader) => {
     </div>
   )
 }
-
-// PageHeader.propTypes = {
-//
-//   routes: PropTypes.array,
-//   params: PropTypes.object,
-//   location: PropTypes.object,
-//   breadcrumbNameMap: PropTypes.object,
-//   tabList:PropTypes.array,
-//   tabActiveKey:PropTypes.string,
-//   tabDefaultActiveKey:PropTypes.string,
-//   tabBarExtraContent:PropTypes.object,
-//   tabOnChange:PropTypes.func,
-// }
 
 export default PageHeader

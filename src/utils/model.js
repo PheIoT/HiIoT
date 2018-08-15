@@ -2,23 +2,6 @@ import modelExtend from 'dva-model-extend'
 // import queryString from "query-string"
 
 export const model = {
-  state: {
-    routes: {},
-    locationPathname: '',
-    locationQuery: {},
-  },
-  effects: {
-    * getRoutesForBread ({}, {put, select}) {
-      const routes = yield select((s) => {
-        return {
-          routes: s.app.menu,
-          locationPathname: s.app.locationPathname,
-          locationQuery: s.app.locationQuery,
-        }
-      })
-      yield put({payload: routes})
-    },
-  },
   reducers: {
     updateState (state, {payload}) {
       return {

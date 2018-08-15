@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { product } = api
+const { product,message } = api
 
 export function query (params) {
   return request({
@@ -31,6 +31,14 @@ export function update (params) {
   return request({
     url: product,
     method: 'patch',
+    data: params,
+  })
+}
+
+export function queryMessage (params) {
+  return request({
+    url: message,
+    method: 'get',
     data: params,
   })
 }
