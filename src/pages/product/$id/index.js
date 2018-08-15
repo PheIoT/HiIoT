@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {routerRedux} from 'dva/router'
 import {connect} from 'dva'
-import {Tag, Row, Col, Card, Button} from 'antd'
+import {Tag, Row, Col, Card, Button, message} from 'antd'
 import {Page} from 'components'
 import styles from './index.less'
+import copy from 'copy-to-clipboard'
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout'
 import DescriptionList from '../components/DescriptionList'
 import Description from '../components/Description'
@@ -14,8 +15,8 @@ import Filter from './components/Filter'
 import List from './components/List'
 
 const Detail = ({location, dispatch, productDetail, loading}) => {
-  const {data, secretVisible, activeTabKey, message, modalVisible, modalType} = productDetail
-  const {activeMsgTabKey, query: msgQuery, list: msgList, pagination: msgPagination} = message
+  const {data, secretVisible, activeTabKey, message:smessage, modalVisible, modalType} = productDetail
+  const {activeMsgTabKey, query: msgQuery, list: msgList, pagination: msgPagination} = smessage
 
   location.query = queryString.parse(location.search)
   const {query, pathname} = location
@@ -37,7 +38,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
     <span>产品密钥: ********<a onClick={toggleSecret}> 显示</a></span>
   )
   const fullSecret = (
-    <span>产品密钥: {data.productSecret}<a> 复制</a><a onClick={toggleSecret}> 隐藏</a></span>
+    <span>产品密钥: {data.productSecret}<a onClick={() => copyContent(data.productSecret)}> 复制</a><a onClick={toggleSecret}> 隐藏</a></span>
   )
 
   const handleEditClick = () => {
@@ -73,7 +74,7 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
   const onMsgTabChange = (key) => {
     dispatch({
       type: 'productDetail/activeTab',
-      payload: {message: {...message, activeMsgTabKey: key}},
+      payload: {message: {...smessage, activeMsgTabKey: key}},
     })
   }
 
@@ -143,13 +144,19 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
     ),
   }
 
+  const copyContent = (content) => {
+    console.log(content.target)
+    copy(content)
+    message.success('复制成功')
+  }
+
   const pageHeaderContent = (
     <div className={styles.pageHeaderContent}>
       <div className={styles.content}>
         <div className={styles.contentTitle}>
           <Row>
             <Col span={6}>
-              产品编号: {data.productKey} <a> 复制</a>
+              产品编号: {data.productKey} <a onClick={() => copyContent(data.productKey)}> 复制 </a>
             </Col>
             <Col span={6}>
               {secretVisible === false ? defaultSecret : fullSecret}
