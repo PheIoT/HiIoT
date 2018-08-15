@@ -15,7 +15,7 @@ import Filter from './components/Filter'
 import List from './components/List'
 
 const Detail = ({location, dispatch, productDetail, loading}) => {
-  const {data, secretVisible, activeTabKey, message:smessage, modalVisible, modalType} = productDetail
+  const {data, secretVisible, activeTabKey, message: smessage, modalVisible, modalType} = productDetail
   const {activeMsgTabKey, query: msgQuery, list: msgList, pagination: msgPagination} = smessage
 
   location.query = queryString.parse(location.search)
@@ -38,7 +38,8 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
     <span>产品密钥: ********<a onClick={toggleSecret}> 显示</a></span>
   )
   const fullSecret = (
-    <span>产品密钥: {data.productSecret}<a onClick={() => copyContent(data.productSecret)}> 复制</a><a onClick={toggleSecret}> 隐藏</a></span>
+    <span>产品密钥: {data.productSecret}<a onClick={() => copyContent(data.productSecret)}> 复制</a><a
+      onClick={toggleSecret}> 隐藏</a></span>
   )
 
   const handleEditClick = () => {
@@ -94,15 +95,17 @@ const Detail = ({location, dispatch, productDetail, loading}) => {
     loading: loading.effects['productDetail/queryMessage'],
     pagination: msgPagination,
     location,
-    onChange () {
-      // handleRefresh({
-      //   page: page.current,
-      //   pageSize: page.pageSize,
-      // })
+    onChange (page) {
+      dispatch({
+        type: 'productDetail/queryMessage',
+        payload: {
+          page: page.current,
+          pageSize: page.pageSize,
+        },
+      })
     },
   }
-  // console.log(logListProps)
-  // console.log(List)
+
   const logCardContentList = {
     up: (
       <Page inner>
