@@ -7,7 +7,6 @@ const BodyTitle = ({
                        title,
                        buttons,
                      }) => {
-  console.log(title)
 
  let btns = buttons.map((item,id) => {
     return (
@@ -19,7 +18,6 @@ const BodyTitle = ({
       >{item.text}</Button>
     )
   })
-console.log(btns)
 
   return(
     <div className={styles.bodyTitle}>

@@ -1,0 +1,158 @@
+@import "~themes/vars.less";
+@import "../../utils/utils.less";
+
+.activitiesList {
+  padding: 0 24px 8px 24px;
+  .username {
+    color: @text-color;
+  }
+  .event {
+    font-weight: normal;
+  }
+}
+
+.pageHeader {
+  .content {
+    width: 200px;
+    flex: none;
+  }
+}
+
+.pageHeaderContent {
+  display: flex;
+  .avatar {
+    flex: 0 1 72px;
+    margin-bottom: 8px;
+    & > span {
+      border-radius: 72px;
+      display: block;
+      width: 72px;
+      height: 72px;
+    }
+  }
+  .content {
+    position: relative;
+    top: 4px;
+    //margin-left: 14px;
+    flex: 1 1 auto;
+    color: @text-color-secondary;
+    line-height: 22px;
+    .contentTitle {
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 500;
+      color: @heading-color;
+      margin-bottom: 12px;
+    }
+  }
+}
+.contentAction {
+ top:19px
+}
+
+.extraContent {
+  .clearfix();
+  float: right;
+  white-space: nowrap;
+  margin-left: 20px;
+
+  min-width: 242px;
+  .statItem {
+    padding: 0 32px;
+    position: relative;
+    display: inline-block;
+    > p:first-child {
+      color: @text-color-secondary;
+      font-size: @font-size-base;
+      line-height: 22px;
+      margin-bottom: 4px;
+    }
+    > p {
+      color: @heading-color;
+      font-size: 30px;
+      line-height: 38px;
+      margin: 0;
+      > span {
+        color: @text-color-secondary;
+        font-size: 20px;
+      }
+    }
+    &:before {
+      background-color: @border-color-split;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 1px;
+      height: 40px;
+      content: '';
+    }
+  }
+
+  .action {
+    position: relative;
+    display: inline-block;
+    margin-left: 56px;
+    min-width: 120px;
+    bottom:19px
+  }
+}
+
+@media screen and (max-width: @screen-xl) and (min-width: @screen-lg) {
+  .activeCard {
+    margin-bottom: 24px;
+  }
+
+  .members {
+    margin-bottom: 0;
+  }
+
+  .extraContent {
+    margin-left: -44px;
+    .statItem {
+      padding: 0 16px;
+    }
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .activeCard {
+    margin-bottom: 24px;
+  }
+
+  .members {
+    margin-bottom: 0;
+  }
+
+  .extraContent {
+    float: none;
+    margin-right: 0;
+    .statItem {
+      padding: 0 16px;
+      text-align: left;
+      &:after {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .extraContent {
+    margin-left: -16px;
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .pageHeaderContent {
+    display: block;
+    .content {
+      margin-left: 0;
+    }
+  }
+
+  .extraContent {
+    .statItem {
+      float: none;
+    }
+  }
+}

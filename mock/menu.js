@@ -21,6 +21,12 @@ let database = [
     name: 'Product Detail',
     route: '/product/:id',
   },
+  {
+    id: '3',
+    name: '设备管理',
+    icon: 'cloud-o',
+    route: '/device',
+  },
 ]
 
 module.exports = {

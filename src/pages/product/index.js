@@ -11,7 +11,7 @@ import Filter from './components/Filter'
 import Modal from './components/Modal'
 import BodyTitle from './components/BodyTitle'
 
-import styles from './product.less'
+// import styles from './product.less'
 
 const Product = ({
                    location, dispatch, product, loading,
@@ -93,13 +93,13 @@ const Product = ({
     },
   }
 
-  const pageHeaderContent = (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.content}>
-        <div className={styles.contentTitle}>产品管理</div>
-      </div>
-    </div>
-  )
+  // const pageHeaderContent = (
+  //   <div className={styles.pageHeaderContent}>
+  //     <div className={styles.content}>
+  //       <div className={styles.contentTitle}>产品管理</div>
+  //     </div>
+  //   </div>
+  // )
 
   const bodyTitleProps = {
     title: '产品列表',
@@ -127,7 +127,8 @@ const Product = ({
 
   return (
     <PageHeaderLayout
-      content={pageHeaderContent}
+      title='产品管理'
+      // content={pageHeaderContent}
     >
       <Page inner>
         <BodyTitle {...bodyTitleProps}/>

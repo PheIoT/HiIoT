@@ -23,6 +23,7 @@ module.exports = {
     product: `${APIV1}/product/:id`,
     products: `${APIV1}/products`,
     message: `${APIV1}/message`,
+    device: `${APIV1}/device/:id`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
     weather: `${APIV1}/weather`,

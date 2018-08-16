@@ -7,4 +7,5 @@ export default {
   ...require('./mock/user'),
   ...require('./mock/product'),
   ...require('./mock/message'),
+  ...require('./mock/device'),
 }
