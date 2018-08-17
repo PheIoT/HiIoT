@@ -8,4 +8,5 @@ export default {
   ...require('./mock/product'),
   ...require('./mock/message'),
   ...require('./mock/device'),
+  ...require('./mock/deviceTopic'),
 }

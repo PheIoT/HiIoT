@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 // import {routerRedux} from 'dva/router'
 import {connect} from 'dva'
-import { Tag, Row, Col,Card} from 'antd'
+import {Tag, Row, Col, Card} from 'antd'
 // import {Page} from 'components'
 import styles from './index.less'
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout'
@@ -12,13 +12,18 @@ import Modal from '../components/Modal'
 import queryString from "query-string"
 import copy from "copy-to-clipboard/index"
 import {message} from "antd/lib/index"
+import TopicCard from './components/TopicCard'
+
 // import Filter from './components/Filter'
 // import List from './components/List'
 
 const Detail = ({location, dispatch, deviceDetail}) => {
-  const {data,secretVisible,
+  const {
+    data, secretVisible,
     // secretVisible,
-    activeTabKey, modalVisible} = deviceDetail
+
+    activeTabKey, modalVisible,
+  } = deviceDetail
 
   location.query = queryString.parse(location.search)
   // const {query, pathname} = location
@@ -48,13 +53,15 @@ const Detail = ({location, dispatch, deviceDetail}) => {
     },
   ]
 
+
   const contentList = {
     detail: (
       <Card title="设备信息" style={{marginBottom: 24}} bordered={false}>
         <DescriptionList style={{marginBottom: 24}}>
           <Description term="产品名称">{data.productName}</Description>
           <Description term="节点类型">{data.pointType === 'device' ? '设备' : '网关'}</Description>
-          <Description term="设备名称">{data.deviceName} <a onClick={() => copyContent(data.deviceName)}>复制</a></Description>
+          <Description term="设备名称">{data.deviceName} <a
+            onClick={() => copyContent(data.deviceName)}>复制</a></Description>
           <Description term="当前状态">{data.isActive ? '已激活' : '未激活'} </Description>
           <Description term="IP地址">{data.ip ? data.ip : '-'}</Description>
           <Description term="固件版本">{data.dotVersion ? data.dotVersion : '-'}</Description>
@@ -68,7 +75,7 @@ const Detail = ({location, dispatch, deviceDetail}) => {
       </Card>
     ),
     topic: (
-      <div>topic</div>
+      <TopicCard {...activeTabKey}/>
     ),
   }
 
@@ -111,7 +118,7 @@ const Detail = ({location, dispatch, deviceDetail}) => {
         <div className={styles.contentTitle}>
           <Row>
             <Col span={6}>
-              产品: {data.productName} <a> 前往管理</a>
+              产品: {data.productName} <a> 查看</a>
             </Col>
             <Col span={6}>
               产品编号: {data.productKey} <a onClick={() => copyContent(data.productKey)}> 复制 </a>
@@ -134,7 +141,7 @@ const Detail = ({location, dispatch, deviceDetail}) => {
         breadcrumbRoutes={breadcrumbRoutes}
       >
         {contentList[activeTabKey]}
-        {modalVisible && <Modal  />}
+        {modalVisible && <Modal/>}
       </PageHeaderLayout>
     </div>
   )
