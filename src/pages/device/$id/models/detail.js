@@ -1,76 +1,40 @@
 import pathToRegexp from 'path-to-regexp'
 import modelExtend from 'dva-model-extend'
 import {model} from 'utils/model'
-import {query, update, queryMessage} from "../../services/product"
+import {queryById, update} from "../../services/device"
 
 
 export default modelExtend(model, {
 
-  namespace: 'productDetail',
+  namespace: 'deviceDetail',
 
   state: {
     data: {},
     secretVisible: false,
     activeTabKey: 'detail',
-
     modalVisible: false,
-    message: {
-      query: {
-        deviceName: '',
-        createTime: '',
-      },
-      list: [],
-      pagination: {
-        showSizeChanger: true,
-        showQuickJumper: true,
-        current: 1,
-        total: 0,
-        pageSize: 10,
-      },
-      activeMsgTabKey: 'up',
-    },
   },
 
   subscriptions: {
     setup ({dispatch, history}) {
       history.listen(({pathname}) => {
-        const match = pathToRegexp('/product/:id').exec(pathname)
+        const match = pathToRegexp('/device/:id').exec(pathname)
         if (match) {
           dispatch({type: 'query', payload: {id: match[1]}})
         }
-
       })
     },
   },
 
   effects: {
     * query ({payload}, {call, put}) {
-      const data = yield call(query, payload)
+      const data = yield call(queryById, payload)
       const {success, message, status, ...other} = data
       if (success) {
         yield put({
           type: 'querySuccess',
           payload: {
             data: other,
-          },
-        })
-      } else {
-        throw data
-      }
-    },
-    * queryMessage ({payload}, {call, put}) {
-      const data = yield call(queryMessage, payload)
-      const {success, message, status, ...other} = data
-      if (success) {
-        yield put({
-          type: 'queryMsgSuccess',
-          payload: {
-            list: other.data,
-            pagination: {
-              current: Number(payload.page) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: other.total,
-            },
           },
         })
       } else {
@@ -113,6 +77,20 @@ export default modelExtend(model, {
       return {
         ...state,
         data,
+      }
+    },
+    queryMsgSuccess (state, {payload}) {
+      const {list, pagination} = payload
+      return {
+        ...state,
+        message: {
+          ...state.message,
+          pagination:{
+            ...state.message.pagination,
+            ...pagination,
+          },
+          list:list,
+        },
       }
     },
     showModal (state, {payload}) {

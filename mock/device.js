@@ -13,10 +13,16 @@ let deviceListData = Mock.mock({
       'isActived|1': false,
       'isEnabled|1': true,
       'createTime': '@datetime',
+      'activeTime': '@datetime',
       'lastOnlineTime': '@datetime',
+      'dotVersion|8':'',
+      'ip':'@ip',
       'productId': '@nid',
       'productName': '@name',
       'pointType|1':['device', 'netgate'],
+      'version|1':['base','advance'],
+      'productKey|12':'',
+      'productSecret|16':'',
     },
   ],
 })
@@ -84,10 +90,19 @@ module.exports = {
     })
   },
 
+  [`GET ${apiPrefix}/device/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(database, id, 'id')
+    if (data) {
+      res.status(200).json(data)
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
   [`DELETE ${apiPrefix}/device/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
-    console.log(data)
     if (data) {
       database = database.filter(item => item.id !== id)
       res.status(204).end()
