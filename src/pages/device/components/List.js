@@ -34,6 +34,11 @@ const List = ({
       title: '设备名称',
       dataIndex: 'deviceName',
       key: 'deviceName',
+      render: (text, record) => {
+        return (
+          <Link to={`device/${record.id}`}>{record.deviceName}</Link>
+        )
+      },
     }, {
       title: '该设备所属产品',
       dataIndex: 'productName',
@@ -47,13 +52,13 @@ const List = ({
       dataIndex: 'status',
       key: 'status',
       render: (text, record) => {
-        return <div>
+        return( <div>
           {record.isActived ? '已激活' : '未激活'} &nbsp;
           <Switch size='small' checked={record.isEnabled} onChange={
             (value) => {
               onChange(record.id, value)
             }}/>
-        </div>
+        </div>)
       },
     }, {
       title: '最后上线时间',

@@ -1,15 +1,15 @@
 import pathToRegexp from 'path-to-regexp'
 import modelExtend from 'dva-model-extend'
 import {model} from 'utils/model'
-import {query} from "../../services/topic"
+import {query, sendMsg} from "../../services/topic"
 
 
 export default modelExtend(model, {
-
   namespace: 'deviceTopic',
 
   state: {
     list: [],
+    currentTopicItem: {},
     modalVisible: false,
   },
 
@@ -55,6 +55,22 @@ export default modelExtend(model, {
           ...payload,
         },
       })
+    },
+    * sendMsg ({payload}, {call, put, select}) {
+      const params = yield select(({deviceTopic}) => {
+        return {
+          id: deviceTopic.currentTopicItem.id,
+          deviceId: deviceTopic.currentTopicItem.deviceId,
+        }
+      })
+      const msg = {...payload, ...params}
+
+      const data = yield call(sendMsg, msg)
+      if (data.success) {
+        yield put({type: 'hideModal'})
+      } else {
+        throw data
+      }
     },
   },
 

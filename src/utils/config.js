@@ -25,6 +25,7 @@ module.exports = {
     message: `${APIV1}/message`,
     device: `${APIV1}/device/:id`,
     deviceTopic: `${APIV1}/device/:id/topic`,
+    deviceTopicMsg: `${APIV1}/device/:id/topic/msg`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
     weather: `${APIV1}/weather`,

@@ -4,28 +4,29 @@ import PropTypes from 'prop-types'
 import {Table} from 'antd'
 import classnames from 'classnames'
 import {Page} from 'components'
-
+import TopicSenderModal from './TopicSenderModal'
 // import queryString from 'query-string'
 // import {Link} from 'react-router-dom'
 import styles from './TopicCard.less'
 
 const TopicCard = ({
                      // location,
-                     // dispatch,
+                     dispatch,
                      deviceTopic, loading,
                    }) => {
 
   // location.query = queryString.parse(location.search)
 
-  const {list} = deviceTopic
+  const {list, currentTopicItem, modalVisible} = deviceTopic
 
 
   const handleClick = (record) => {
-    console.log(record)
-    // onStatusChange({
-    //   id: id,
-    //   isEnabled: record,
-    // })
+    dispatch({
+      type: 'deviceTopic/showModal',
+      payload: {
+        currentTopicItem: record,
+      },
+    })
   }
 
   const columns = [
@@ -70,6 +71,33 @@ const TopicCard = ({
 
     loading: loading.effects['deviceTopic/query'],
   }
+
+  const modalProps = {
+    item: currentTopicItem,
+    visible: modalVisible,
+    maskClosable: false,
+    // confirmLoading: loading.effects['device/:id/sendmsg'],
+    title: `发布消息`,
+    wrapClassName: 'vertical-center-modal',
+    onOk (data) {
+      dispatch({
+        type: `deviceTopic/sendMsg`,
+        payload: data,
+      })
+        .then(() => {
+          dispatch({
+            type: 'deviceTopic/query',
+            payload: {id: currentTopicItem.deviceId},
+          })
+        })
+    },
+    onCancel () {
+      dispatch({
+        type: 'deviceTopic/hideModal',
+      })
+    },
+  }
+
   return (
     <Page inner>
       <Table
@@ -83,6 +111,7 @@ const TopicCard = ({
         components={CommonBody}
         align={'left'}
       />
+      {modalVisible && <TopicSenderModal {...modalProps}/>}
     </Page>
   )
 }

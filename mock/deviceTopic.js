@@ -34,14 +34,14 @@ let deviceTopicListData = [{
 
 
 let database = deviceTopicListData
-console.log('*******')
 
+const NOTFOUND = {
+  message: 'Not Found',
+  documentation_url: 'http://localhost:8000/request',
+}
 module.exports = {
   // [`GET /a`] (req, res) {
   [`GET ${apiPrefix}/device/:id/topic`] (req, res) {
-    console.log('==========')
-    const {id} = req.params
-    console.log(id)
 
     res.status(200).json({
       data: database,
@@ -49,4 +49,26 @@ module.exports = {
     })
   },
 
+  [`PATCH ${apiPrefix}/device/:did/topic/msg`] (req, res) {
+    const { did } = req.params
+    const editItem = req.body
+    let isExist = false
+
+    database = database.map((item) => {
+      console.log('item:'+item.id)
+      console.log('ei:'+editItem.id)
+      if (item.id === editItem.id) {
+        isExist = true
+        item.msgCount ++
+        return Object.assign({}, item, editItem)
+      }
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
 }
