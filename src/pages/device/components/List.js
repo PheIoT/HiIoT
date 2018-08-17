@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Table} from 'antd'
+import {Table, Switch} from 'antd'
 import classnames from 'classnames'
 import queryString from 'query-string'
 import {Link} from 'react-router-dom'
@@ -10,19 +10,25 @@ import {Modal} from "antd/lib/index"
 const {confirm} = Modal
 
 const List = ({
-                onDeleteItem, location, ...tableProps
+                onDeleteItem, onStatusChange, location, ...tableProps
               }) => {
   location.query = queryString.parse(location.search)
 
   const handleDeleteClick = (record) => {
-      confirm({
-        title: '确定要删除设备 ' + record.deviceName + ' 吗?',
-        onOk () {
-          onDeleteItem(record.id)
-        },
-      })
+    confirm({
+      title: '确定要删除设备 ' + record.deviceName + ' 吗?',
+      onOk () {
+        onDeleteItem(record.id)
+      },
+    })
   }
 
+  const onChange = (id, record) => {
+    onStatusChange({
+      id: id,
+      isEnabled: record,
+    })
+  }
   const columns = [
     {
       title: '设备名称',
@@ -40,18 +46,27 @@ const List = ({
       title: '状态/启用状态',
       dataIndex: 'status',
       key: 'status',
+      render: (text, record) => {
+        return <div>
+          {record.isActived ? '已激活' : '未激活'} &nbsp;
+          <Switch size='small' checked={record.isEnabled} onChange={
+            (value) => {
+              onChange(record.id, value)
+            }}/>
+        </div>
+      },
     }, {
       title: '最后上线时间',
       dataIndex: 'lastOnlineTime',
       key: 'lastOnlineTime',
-    },{
+    }, {
       title: '操作',
       dataIndex: 'option',
       key: 'option',
       width: 100,
       render: (text, record) => {
         return <div><Link to={`device/${record.id}`}>查看</Link> <a key='del'
-                                                                   onClick={() => handleDeleteClick(record)}>删除</a>
+                                                                  onClick={() => handleDeleteClick(record)}>删除</a>
         </div>
       },
     },
@@ -75,8 +90,9 @@ const List = ({
 }
 
 List.propTypes = {
-  onViewItem: PropTypes.func,
   location: PropTypes.object,
+  onStatusChange: PropTypes.func,
+  onDeleteItem: PropTypes.func,
 }
 
 export default List

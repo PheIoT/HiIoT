@@ -2,9 +2,11 @@
 import modelExtend from 'dva-model-extend'
 import queryString from 'query-string'
 import * as deviceService from '../services/device'
+import * as productService from '../../product/services/products'
 import {pageModel} from 'utils/model'
 
-const {query, remove} = deviceService
+const {query, remove,create, update} = deviceService
+const {query:queryProducts} = productService
 
 export default modelExtend(pageModel, {
   namespace: 'device',
@@ -13,6 +15,7 @@ export default modelExtend(pageModel, {
     query: {},
     list: [],
     currentProductName: '',
+    products:[],
     modalVisible: false,
     modalType: 'create',
     activeTabKey: 'device',
@@ -26,6 +29,10 @@ export default modelExtend(pageModel, {
           dispatch({
             type: 'query',
             payload,
+          })
+
+          dispatch({
+            type: 'queryProducts',
           })
         }
       })
@@ -49,10 +56,38 @@ export default modelExtend(pageModel, {
         })
       }
     },
+    * queryProducts ({}, {call, put}) {
+      const data = yield call(queryProducts)
+      if (data.success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            products: data.data,
+          },
+        })
+      }
+    },
     * delete ({payload}, {call, put}) {
       const data = yield call(remove, {id: payload})
       if (data.success) {
         yield put({type: 'updateState'})
+      } else {
+        throw data
+      }
+    },
+    * create ({payload}, {call, put}) {
+      const data = yield call(create, payload)
+      if (data.success) {
+        yield put({type: 'hideModal'})
+      } else {
+        throw data
+      }
+    },
+
+    * changeEnabled ({payload}, {call, put}) {
+      const data = yield call(update, payload)
+      if (data.success) {
+        yield put({type: 'hideModal'})
       } else {
         throw data
       }

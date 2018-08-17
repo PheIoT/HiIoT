@@ -13,6 +13,7 @@ const ColProps = {
 
 
 const Filter = ({
+                  onAdd,
                   onFilterChange,
                   filter,
                   form: {
@@ -48,7 +49,7 @@ const Filter = ({
         <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
           <div></div>
           <div className="flex-vertical-center">
-            <Button type="primary">添加设备</Button>
+            <Button type="primary" onClick={onAdd}>添加设备</Button>
           </div>
         </div>
 
@@ -61,6 +62,7 @@ Filter.propTypes = {
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
+  onAdd: PropTypes.func,
 }
 
 export default Form.create()(Filter)

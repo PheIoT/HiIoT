@@ -1,8 +1,10 @@
 import React from 'react'
-import {Button, Tooltip, Icon, Select, Card} from 'antd'
+import {Button, Tooltip, Icon, Select, Card, message} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from 'dva'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
+import Modal from './components/Modal'
+
 import queryString from 'query-string'
 // import {Page} from 'components'
 import Filter from './components/Filter'
@@ -18,7 +20,7 @@ const Device = ({
   location.query = queryString.parse(location.search)
   const {query} = location
 
-  const {activeTabKey, list, pagination} = device
+  const {activeTabKey, list, pagination, modalVisible, products} = device
   const pageHeaderContent = (
 
     <Select
@@ -85,12 +87,13 @@ const Device = ({
       ...query,
     },
     onFilterChange (value) {
-      console.log(value)
       handleRefresh(value)
 
     },
     onAdd () {
-      console.log('on add.')
+      dispatch({
+        type: 'device/showModal',
+      })
     },
   }
 
@@ -120,6 +123,18 @@ const Device = ({
           })
         })
     },
+    onStatusChange (record) {
+      dispatch({
+        type: 'device/changeEnabled',
+        payload: {...record},
+      })
+        .then(() => {
+          handleRefresh({
+            page: (list.length === 1 && pagination.current > 1) ? pagination.current - 1 : pagination.current,
+          })
+          message.success('设备状态修改成功.')
+        })
+    },
   }
 
   const tabContent = {
@@ -141,6 +156,29 @@ const Device = ({
     })
   }
 
+  const modalProps = {
+    item: {},
+    products: products,
+    visible: modalVisible,
+    maskClosable: false,
+    confirmLoading: loading.effects['product/update'],
+    title: `创建设备`,
+    wrapClassName: 'vertical-center-modal',
+    onOk (data) {
+      dispatch({
+        type: 'device/create',
+        payload: data,
+      })
+        .then(() => {
+          handleRefresh()
+        })
+    },
+    onCancel () {
+      dispatch({
+        type: 'device/hideModal',
+      })
+    },
+  }
   return (
     <PageHeaderLayout
       title='设备管理'
@@ -157,6 +195,8 @@ const Device = ({
       >
         {tabContent[activeTabKey]}
       </Card>
+      {modalVisible && <Modal {...modalProps} />}
+
     </PageHeaderLayout>
   )
 }

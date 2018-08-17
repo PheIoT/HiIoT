@@ -43,3 +43,11 @@ export function update (params) {
     data: params,
   })
 }
+export function changeStatus (params) {
+  return request({
+    url: device,
+    method: 'patch',
+    data: params,
+  })
+}
+

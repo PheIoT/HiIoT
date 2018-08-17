@@ -10,7 +10,8 @@ let deviceListData = Mock.mock({
     {
       id: '@id',
       'deviceName': '@name',
-      'status': ['unactive', 'enable'],
+      'isActived|1': false,
+      'isEnabled|1': true,
       'createTime': '@datetime',
       'lastOnlineTime': '@datetime',
       'productId': '@nid',
@@ -90,6 +91,41 @@ module.exports = {
     if (data) {
       database = database.filter(item => item.id !== id)
       res.status(204).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`POST ${apiPrefix}/device`] (req, res) {
+    const newData = req.body
+    newData.createTime = Mock.mock('@now')
+    newData.id = Mock.mock('@id')
+    newData.productId = Mock.mock('@id')
+    newData.productName = Mock.mock('@name')
+    newData.isActived = false
+    newData.isEnabled = true
+    newData.pointType = 'device'
+    database.unshift(newData)
+
+    res.status(200).end()
+  },
+
+
+  [`PATCH ${apiPrefix}/device/:id`] (req, res) {
+    const { id } = req.params
+    const editItem = req.body
+    let isExist = false
+
+    database = database.map((item) => {
+      if (item.id === id) {
+        isExist = true
+        return Object.assign({}, item, editItem)
+      }
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
     } else {
       res.status(404).json(NOTFOUND)
     }
